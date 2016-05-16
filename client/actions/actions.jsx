@@ -5,4 +5,10 @@ export default {
   //     id: actionId
   //   };
   // }
+  GET_FILES (id) {
+    return {
+      type: 'GET_FILES',
+      id: id
+    };
+  }
 };

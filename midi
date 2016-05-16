@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+'use strict'
+const midi = require('midi');
+const midifile = require('midifile');
+const midiplayer = require('midiplayer');
+const midievents = require('midievents');
+const fs = require('fs');
+
+const output = new midi.output();
+output.openVirtualPort('AAPOC');
+
+const player = new midiplayer({output});
+
+fs.readFile('./test/telstar.mid', (err, data) => {
+  const file = new midifile(new Uint8Array(data).buffer);
+  player.load(file);
+  player.play();
+});
+
+output.closePort();
