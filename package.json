@@ -34,7 +34,7 @@
     "express": "^4.13.4",
     "midi": "^0.9.4",
     "midifile": "^1.0.4",
-    "midiplayer": "file:MIDIPlayer",
+    "midiplayer": "https://github.com/nfroidure/MIDIPlayer",
     "nodemon": "^1.9.2",
     "performance-now": "^0.2.0",
     "react": "^15.0.2",

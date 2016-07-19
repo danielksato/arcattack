@@ -2,7 +2,7 @@
 'use strict'
 const midi = require('midi');
 const midifile = require('midifile');
-const midiplayer = require('./app/lib/midiplayer');
+const midiplayer = require('midiplayer');
 const midievents = require('midievents');
 const fs = require('fs');
 
