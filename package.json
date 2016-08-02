@@ -31,6 +31,7 @@
     "babel-preset-react": "^6.5.0",
     "body-parser": "^1.15.1",
     "cookie-parser": "^1.4.1",
+    "cors": "^2.7.1",
     "express": "^4.13.4",
     "midi": "^0.9.4",
     "midifile": "^1.0.4",

@@ -27,6 +27,30 @@ createDB(schema, db);
 
 module.exports = {
 
-  doSomething () {}
+  doSomething () {},
+
+  login (req, cb) {
+    db.get('SELECT * FROM USERS WHERE USERNAME LIKE ?', [req.username], (err, res) => {
+      if (err) return console.log(err);
+      cb (res || null);
+    });
+  },
+
+  register (req, cb) {
+    db.get('SELECT * FROM USERS WHERE USERNAME LIKE ?', [req.username], (err, res) => {
+      if (err) return console.log(err);
+      if (res) cb(null);
+      !res && db.run(
+        'INSERT INTO USERS (username, email, password) VALUES(?,?,?)',
+        [req.username, req.email, req.password],
+        (err, res) => {
+          if (err) return console.log(err);
+          db.get('SELECT * FROM USERS WHERE USERNAME LIKE ?', [req.username], (err, res) => {
+            !err && cb(res);
+          });
+        }
+      );
+    });
+  }
 
 };

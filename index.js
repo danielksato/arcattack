@@ -2,18 +2,37 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const webpack = require('webpack');
-const webpackMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const config = require('./webpack.config.js');
+const cors = require ('cors');
 const db = require('./app/db');
-const processMidi = require('./app/processMidi');
 
 const app = express();
-const compiler = webpack(config);
 
-app.use(webpackMiddleware(compiler));
-app.use(webpackHotMiddleware(compiler));
-app.use(express.static('.'));
+// app.use(cookieParser());
+// app.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   res.header('Access-Control-Allow-Method', 'PUT, POST, GET, DELETE');
+//   next();
+// })
+app.use(cors());
+app.use(bodyParser.json());
 
-app.listen(process.env.PORT || 3000);
+app.put('/login', (req, res) => {
+  db.login(req.body, (val) => {
+    if (!val) {
+      res.status(403);
+      res.send();
+    } else res.json(val);
+  })
+});
+
+app.put('/register', (req, res) => {
+  db.register(req.body, (val) => {
+    if (!val) {
+      res.status(403);
+      res.send();
+    } else res.json(val);
+  });
+});
+
+app.listen(3001);
