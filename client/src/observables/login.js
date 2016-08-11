@@ -10,11 +10,7 @@ export const loginObservable = loginSubject.distinctUntilChanged((x, y) => is(x,
       body: JSON.stringify(val.toJS()),
       headers: {'content-type': 'application/json'},
       method: 'PUT',
-      // responseType: 'json',
       url: `http://localhost:3001/${val.get('action')}`
-    }).do((res) => {
-      // todo: error handling
-      loginSubject.onNext(res);
-    }).subscribe();
+    }).subscribe((val) => loginSubject.onNext(val));
     return Observable.just(Map(val));
 });

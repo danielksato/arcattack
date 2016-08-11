@@ -5,6 +5,13 @@ import UserForm from './userForm.js';
 
 class Login extends Component {
 
+  constructor (props) {
+    super(props);
+    this.state = {
+      visibleComponent: null,
+    };
+  }
+
   get styles () {
     return {
       button: {
@@ -27,13 +34,6 @@ class Login extends Component {
       }
     }
 
-  }
-
-  constructor (props) {
-    super(props);
-    this.state = {
-      visibleComponent: null,
-    };
   }
 
   login (e) {

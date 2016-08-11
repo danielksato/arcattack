@@ -17,8 +17,9 @@ const schema = {
     role: 'varchar(255) default "user"'
   },
   songs: {
-    owner: 'int',
     filename: 'varchar(255)',
+    owner: 'int',
+    originalname: 'varchar(255)',
     playcount: 'int default 0'
   }
 };
@@ -26,8 +27,6 @@ const schema = {
 createDB(schema, db);
 
 module.exports = {
-
-  doSomething () {},
 
   login (req, cb) {
     db.get('SELECT * FROM USERS WHERE USERNAME LIKE ?', [req.username], (err, res) => {
@@ -47,6 +46,31 @@ module.exports = {
           if (err) return console.log(err);
           db.get('SELECT * FROM USERS WHERE USERNAME LIKE ?', [req.username], (err, res) => {
             !err && cb(res);
+          });
+        }
+      );
+    });
+  },
+
+  getSongs (req, cb) {
+    db.all('SELECT * FROM SONGS', (err, res) => {
+      if (err) return console.log(err);
+      if (res) cb(res);
+    })
+  },
+
+  addSong (req, cb) {
+    db.get('SELECT * FROM SONGS WHERE FILENAME LIKE ?', [req.filename], (err, res) => {
+      if (err) return console.log(err);
+      if (res) return cb(null);
+      db.run(
+        'INSERT INTO SONGS (filename, originalname, owner) VALUES (?,?,?)',
+        [req.file.filename, req.file.originalname, 1],
+        (err, res) => {
+          if (err) return console.log(err);
+          db.get('SELECT * FROM SONGS WHERE FILENAME LIKE ?', [req.file.filename], (err, res) => {
+            if (err) return console.log(err);
+            cb(res);
           });
         }
       );

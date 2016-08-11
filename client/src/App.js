@@ -4,6 +4,8 @@ import logo from './logo.svg';
 import './App.css';
 import {loginSubject, loginObservable} from './observables/login.js';
 import Login from './components/login.js';
+import Uploader from './components/uploader.js';
+import SongList from './components/songList.js';
 // import Main from './components/login.js';
 
 let styles = {
@@ -40,9 +42,14 @@ class App extends Component {
     } else return null;
   }
 
-  renderMain () {
+  renderUploader() {
     if (this.state.loginData) {
-      return <div><h2>{this.state.loginData.get('username')}</h2></div>;
+      return (
+        <div>
+          <h2>{this.state.loginData.get('username')}</h2>
+          <Uploader userData={this.state.loginData} />
+        </div>
+      );
     } else return null;
   }
 
@@ -53,7 +60,8 @@ class App extends Component {
           <h2 style={styles.title}>Arc Attack Streaming POC</h2>
         </div>
         {this.renderLogin()}
-        {this.renderMain()}
+        {this.renderUploader()}
+        <SongList />
       </div>
     );
   }
