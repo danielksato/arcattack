@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Radium from 'radium';
-import {songList} from '../observables/songList.js';
+import {SongList$} from '../observables/songList.js';
+import {PlayQueue$} from '../observables/playQueue.js'
 
 class SongList extends Component {
 
@@ -8,16 +9,24 @@ class SongList extends Component {
     super();
     this.state = {
       songList: [],
-      songList$: songList.subscribe((val) => this.setState({songList: val}))
+      songList$: SongList$.subscribe((val) => this.setState({songList: val.list})),
+      playQueue$: PlayQueue$.subscribe((val) => {
+        this.setState({songList: JSON.parse(val.data).list})
+      })
     };
+  }
+
+  componentWillUnmount () {
+    this.state.songList$.dispose();
+    this.state.playQueue$.dispose();
   }
 
   render () { 
     return (
       <ul>
-        {this.state.songList.map((song) => {
+        {this.state.songList.map((song, index) => {
           return (
-            <li>{song.originalname}</li>
+            <li key={index}>{song.originalname}</li>
           );
         })}
       </ul>

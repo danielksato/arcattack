@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const cors = require ('cors');
 const db = require('./app/db');
 const upload = require('multer')({dest: './uploads'});
+const shuffle = require('lodash').shuffle;
 
 const app = express();
 
@@ -36,7 +37,19 @@ app.post('/upload', upload.single('file'), (req, res) => {
 });
 
 app.get('/fileList', (req, res) => {
-  db.getSongs(req, (val) => dbResponse(val, res));
+  db.getSongs(req, (val) => {
+    dbResponse({port: sockets.httpListener.address().port, list: val}, res);
+  });
 });
 
-app.listen(3001);
+const sockets = require('./app/sockets')(app);
+
+setInterval(() => {
+  const port = sockets.httpListener.address().port;
+
+  db.getSongs(null, (val) => {
+    Object.keys(sockets.sockets).forEach((socket) => {
+      sockets.sockets[socket].send(JSON.stringify({port, list: shuffle(val)}));
+    });
+  });
+}, 3000)
